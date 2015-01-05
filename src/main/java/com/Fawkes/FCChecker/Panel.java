@@ -48,6 +48,8 @@ public class Panel extends JPanel implements Runnable {
 
 	public Panel(int width, int height) {
 
+		// make panel and gui stuff
+
 		setSize(width, height);
 
 		setLayout(new FlowLayout());
@@ -72,10 +74,14 @@ public class Panel extends JPanel implements Runnable {
 
 		statusDisplay.setFont(new Font(Font.SERIF, Font.PLAIN, 70));
 
+		// button listener
 		startButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+
+				// toggles running on/off, starts if it's not already started,
+				// stops otherwise.
 
 				running = !running;
 
@@ -94,6 +100,8 @@ public class Panel extends JPanel implements Runnable {
 	}
 
 	public void start() {
+
+		// sets all the vars to the fields provided
 
 		running = true;
 
@@ -114,6 +122,8 @@ public class Panel extends JPanel implements Runnable {
 
 		options = new MinecraftPingOptions().setHostname(ip);
 
+		// starts a new thread
+
 		thread = new Thread(this);
 
 		thread.start();
@@ -124,12 +134,15 @@ public class Panel extends JPanel implements Runnable {
 
 	public void stop() {
 
+		// sets running to false so thread will stop
+
 		running = false;
 
 		serverUp = false;
 
 		alert();
 
+		// waits for thread to die
 		try {
 			thread.join();
 
@@ -141,6 +154,8 @@ public class Panel extends JPanel implements Runnable {
 	}
 
 	public void run() {
+
+		// bad loop
 
 		while (running) {
 
@@ -156,7 +171,7 @@ public class Panel extends JPanel implements Runnable {
 				}
 
 			} catch (Exception e) {
-				
+
 				e.printStackTrace();
 
 				// server not up.
@@ -204,6 +219,7 @@ public class Panel extends JPanel implements Runnable {
 
 	}
 
+	// basically updates gui
 	public void alert() {
 
 		// make sound, flash icon in toolbar, and update status
@@ -219,6 +235,7 @@ public class Panel extends JPanel implements Runnable {
 
 	}
 
+	// prints stuff out in console
 	public void print(String s) {
 		consle.append(s + "\n");
 
