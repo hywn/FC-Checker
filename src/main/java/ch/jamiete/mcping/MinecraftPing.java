@@ -138,7 +138,7 @@ public class MinecraftPing {
 		in.close();
 		socket.close();
 
-		return new Gson().fromJson((String) json, MinecraftPingReply.class);
+		return new Gson().fromJson(json, MinecraftPingReply.class);
 	}
 
 }
