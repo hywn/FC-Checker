@@ -4,6 +4,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Calendar;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -34,6 +35,8 @@ public class Panel extends JPanel implements Runnable {
 
 	private int sleepTime;
 
+	Calendar currTime;
+
 	private String ip;
 
 	boolean serverUp = false;
@@ -50,15 +53,17 @@ public class Panel extends JPanel implements Runnable {
 
 		// make panel and gui stuff
 
+		currTime = Calendar.getInstance();
+
 		setSize(width, height);
 
 		setLayout(new FlowLayout());
 
 		startButton = new JButton("Start/Stop");
 
-		freqInput = new JTextField("Frequency (ms)", 16);
+		freqInput = new JTextField("5000", 16);
 
-		serverIP = new JTextField("Time between notes (seconds)", 20);
+		serverIP = new JTextField("hub.frostcast.net", 20);
 
 		consle = new JTextArea(11, 26);
 
@@ -151,6 +156,8 @@ public class Panel extends JPanel implements Runnable {
 
 		}
 
+		print("Stopped pinging " + ip);
+
 	}
 
 	public void run() {
@@ -237,7 +244,10 @@ public class Panel extends JPanel implements Runnable {
 
 	// prints stuff out in console
 	public void print(String s) {
-		consle.append(s + "\n");
+
+		consle.append(String.format("[%s hours, %s minutes, %s seconds] %s\n",
+				currTime.get(Calendar.HOUR_OF_DAY),
+				currTime.get(Calendar.MINUTE), currTime.get(Calendar.SECOND), s));
 
 	}
 }
