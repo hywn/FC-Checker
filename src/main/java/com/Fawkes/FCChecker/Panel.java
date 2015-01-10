@@ -39,7 +39,7 @@ public class Panel extends JPanel implements Runnable {
 
 	private String ip;
 
-	boolean serverUp = false;
+	boolean serverUp = true;
 
 	MinecraftPingReply data;
 
@@ -143,9 +143,9 @@ public class Panel extends JPanel implements Runnable {
 
 		running = false;
 
-		serverUp = false;
+		serverUp = true;
 
-		alert();
+		updateDisplay();
 
 		// waits for thread to die
 		try {
@@ -169,48 +169,26 @@ public class Panel extends JPanel implements Runnable {
 			try {
 				data = ping.getPing(options);
 
+				print(ip + " is up.");
+
 				// server is up!
 				if (!serverUp) {
 					serverUp = true;
-					print(ip + " is now up!");
 					alert();
 
 				}
 
 			} catch (Exception e) {
-
-				e.printStackTrace();
-
 				// server not up.
 
-				print("Could not connect to " + ip + "... trying again.");
+				print("Could not connect to " + ip);
 
 				if (serverUp) {
-					print("Could not connect to " + ip + "... trying again.");
 
-					try {
-						Thread.sleep(sleepTime);
+					serverUp = false;
 
-					} catch (InterruptedException e1) {
-						e1.printStackTrace();
+					alert();
 
-					}
-
-					try {
-						data = ping.getPing(options);
-
-						print("Nevermind, it's up!");
-
-					} catch (Exception e1) {
-						e1.printStackTrace();
-						print("Still could not connect to " + ip
-								+ ". We think it may be down!");
-
-						serverUp = false;
-
-						alert();
-
-					}
 				}
 			}
 
@@ -230,6 +208,14 @@ public class Panel extends JPanel implements Runnable {
 	public void alert() {
 
 		// make sound, flash icon in toolbar, and update status
+
+		updateDisplay();
+
+		Run.f.toFront();
+
+	}
+
+	public void updateDisplay() {
 		if (serverUp) {
 			statusDisplay.setText("Online");
 
@@ -237,17 +223,16 @@ public class Panel extends JPanel implements Runnable {
 			statusDisplay.setText("Offline");
 
 		}
-
-		Run.f.toFront();
-
 	}
 
 	// prints stuff out in console
 	public void print(String s) {
 
-		consle.append(String.format("[%s hours, %s minutes, %s seconds] %s\n",
+		consle.append(String.format("[%s:%s:%s] %s\n",
 				currTime.get(Calendar.HOUR_OF_DAY),
 				currTime.get(Calendar.MINUTE), currTime.get(Calendar.SECOND), s));
+
+		currTime = Calendar.getInstance();
 
 	}
 }
